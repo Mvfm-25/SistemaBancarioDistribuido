@@ -1,39 +1,40 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.Scanner;
 
 public class Caixa extends UnicastRemoteObject implements CaixaInterface {
     Scanner teclado = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        try {
-            Agencia iacon = new Agencia();
-            System.out.println("Conectado à agência!");
-        }
-        catch (RemoteException e){
-            System.out.println("Erro ao se conectar com a agência!");
-        }
-
+    public Caixa() throws RemoteException {
+        super();  // Chama o construtor de UnicastRemoteObject
     }
 
-    public void login(Integer numeroConta, String nomeCliente, Agencia agencia){
+    // Agora 'agencia' é do tipo 'AgenciaInterface', não 'Agencia'
+    public boolean login(Integer numeroConta, String nomeCliente, AgenciaInterface agencia) {
         try {
-            agencia.abrirConta(numeroConta, nomeCliente);
-        }
-        catch (RemoteException e){
+            if (agencia.consultarSaldo(numeroConta) >= 0) {
+                System.out.println("Login bem-sucedido.");
+                return true;
+            } else {
+                System.out.println("Cliente não encontrado!");
+                return false;
+            }
+        } catch (RemoteException e) {
             System.out.println("Erro ao entrar na conta!");
+            return false;
         }
     }
 
-    public boolean sacar(Integer numeroConta, double valor, Agencia agencia) throws RemoteException{
-        return  agencia.sacar(numeroConta, valor);
+    // Usando 'AgenciaInterface' como o tipo da 'agencia' aqui também
+    public boolean sacar(Integer numeroConta, double valor, AgenciaInterface agencia) throws RemoteException {
+        return agencia.sacar(numeroConta, valor);
     }
 
-    public boolean depositar(Integer numeroConta, double valor, Agencia agencia) throws RemoteException{
+    public boolean depositar(Integer numeroConta, double valor, AgenciaInterface agencia) throws RemoteException {
         return agencia.depositar(numeroConta, valor);
     }
 
-    public double consultarSaldo(Integer numeroConta, Agencia agencia) throws RemoteException{
+    public double consultarSaldo(Integer numeroConta, AgenciaInterface agencia) throws RemoteException {
         return agencia.consultarSaldo(numeroConta);
     }
 }

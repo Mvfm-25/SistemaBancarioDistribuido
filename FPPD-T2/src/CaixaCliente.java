@@ -1,22 +1,45 @@
 import java.rmi.Naming;
-import java.rmi.RemoteException;
-import java.util.*;
+import java.util.Scanner;
 
 public class CaixaCliente {
-    Scanner teclado = new Scanner(System.in);
 
     public static void main(String[] args) {
-        System.out.println("IACON AGENCIES - CLIENT.0001\n UA: 011124\n");
+        Scanner teclado = new Scanner(System.in);
 
-
+        if (args.length != 1) {
+            System.out.println("Uso: java CaixaCliente <hostname>");
+            System.exit(1);
+        }
 
         try {
-            Caixa usuario = new Caixa();
-            System.out.println();
-        }
-        catch (RemoteException e){
-            System.out.println("Erro ao se conectar ao caixa!");
-        }
-    }
+            AgenciaInterface agencia = (AgenciaInterface) Naming.lookup("//" + args[0] + "/Agencia");
 
+            agencia.abrirConta(01, "John");
+            agencia.abrirConta(02, "Optimus");
+            agencia.depositar(02, 1984);
+
+            System.out.print("Digite o número da conta: ");
+            Integer numeroConta = teclado.nextInt();
+            System.out.print("Digite o valor para depositar");
+            double valor = teclado.nextDouble();
+
+
+
+            CaixaInterface caixa = new Caixa();
+            boolean loginSucesso = caixa.depositar(numeroConta, valor, agencia);
+
+            System.out.println("Conta : " + agencia.getNomeConta(numeroConta));
+            System.out.println("Saldo atual : " + agencia.consultarSaldo(numeroConta));
+
+            agencia.sacar(02, 500);
+            System.out.println("Conta : " + agencia.getNomeConta(02));
+            System.out.println("Saldo atual : " + agencia.consultarSaldo(02));
+
+        } catch (Exception e) {
+            System.out.println("Erro ao conectar com o servidor de Agência.");
+            e.printStackTrace();
+        }
+
+        teclado.close();
+    }
 }

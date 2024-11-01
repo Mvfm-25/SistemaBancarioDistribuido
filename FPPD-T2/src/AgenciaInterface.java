@@ -5,6 +5,8 @@ public interface AgenciaInterface extends Remote {
     // Operações para abertura e fechamento de conta
     boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException;
     boolean fecharConta(Integer numeroConta) throws RemoteException;
+    String getNomeConta(Integer i) throws RemoteException;
+
 
     // Operações de saque, depósito e consulta de saldo
     boolean sacar(Integer numeroConta, double valor) throws RemoteException;

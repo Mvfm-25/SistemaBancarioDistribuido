@@ -1,27 +1,26 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
-
+import java.rmi.registry.LocateRegistry;
 
 public class AdminServer {
-
     public static void main(String[] args) {
-        System.out.println("IACON AGENCIES - SV.0001\n UA: 011124");
-
         try {
-            java.rmi.registry.LocateRegistry.createRegistry(1099);
-            System.out.println("RMI rodando!");
-        }
-        catch (RemoteException e){
-            System.out.println("Erro! RMI já está rodando!");
-        }
+            // Criando o registro RMI na porta 1099
+            LocateRegistry.createRegistry(1099);
+            System.out.println("Registro RMI criado.");
 
-        try {
-            Agencia admin = new Agencia();
-            System.out.println("Admin rodando!");
+            // Instanciando o objeto Admin
+            AdminInterface admin = new Admin();
+
+            // Registrando o objeto no serviço de nomes RMI
+            Naming.rebind("rmi://localhost/AdminService", admin);
+            System.out.println("AdminService pronto para receber requisições.");
+        } catch (RemoteException e) {
+            System.err.println("Erro no servidor de Administração:");
+            e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("Erro! Administração falhou!");
+            System.err.println("Erro geral no AdminServer:");
             e.printStackTrace();
         }
     }
-
 }

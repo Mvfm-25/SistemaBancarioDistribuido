@@ -6,6 +6,10 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
 
     HashMap<Integer, Cliente> clientes;
 
+    public Admin() throws RemoteException{
+        clientes = new HashMap<>();
+    }
+
     public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException {
         for(int i = 0; i < 10; i++){
             if (clientes.containsKey(numeroConta)){

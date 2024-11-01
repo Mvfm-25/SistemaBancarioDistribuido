@@ -29,4 +29,9 @@ public class Agencia extends UnicastRemoteObject implements AgenciaInterface{
     public double consultarSaldo(Integer numeroConta) throws  RemoteException{
         return (upTop.consultarSaldo(numeroConta));
     }
+
+    public String getNomeConta(Integer i) throws RemoteException{
+        return upTop.clientes.get(i).nomeCliente;
+    }
+
 }
