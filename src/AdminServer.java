@@ -5,21 +5,20 @@ import java.rmi.registry.LocateRegistry;
 public class AdminServer {
     public static void main(String[] args) {
         try {
-            // Criando o registro RMI na porta 1099
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado.");
 
-            // Instanciando o objeto Admin
             AdminInterface admin = new Admin();
 
-            // Registrando o objeto no serviço de nomes RMI
-            Naming.rebind("rmi://localhost/AdminService", admin);
-            System.out.println("AdminService pronto para receber requisições.");
+            Naming.rebind("Admin", new Admin());
+            Naming.rebind("Agencia", new Agencia());
+            Naming.rebind("Caixa", new Caixa());
+            System.out.println("Admin & Agencia prontos!");
         } catch (RemoteException e) {
-            System.err.println("Erro no servidor de Administração:");
+            System.err.println("Erro nos servidores: ");
             e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Erro geral no AdminServer:");
+            System.err.println("Erro geral nos servidores: ");
             e.printStackTrace();
         }
     }
