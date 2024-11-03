@@ -19,6 +19,15 @@ public class CaixaCliente {
             System.out.println("Depositando R$200... " + caixa.depositar(1, 200));
             System.out.println("Saldo da conta 01 : " + caixa.consultarSaldo(1));
 
+            System.out.println("Retirando R$200..." + caixa.sacar(1, 200));
+            System.out.println("Saldo da conta 01 : " + caixa.consultarSaldo(1));
+            System.out.println("Retirando R$400... : " + caixa.sacar(1, 400));
+            System.out.println("Depositando -R$400 na conta 01..." + caixa.depositar(1, -400));
+            System.out.println("Saldo da conta 01 : " + caixa.consultarSaldo(1));
+
+
+            System.out.println("Depositando R$300 na conta 03..." + caixa.depositar(3, 300));
+
         } catch (Exception e) {
             System.out.println("CaixaCliente falhou...");
             e.printStackTrace();

@@ -44,6 +44,10 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
     }
 
     public boolean sacar(Integer numeroConta, double valor) throws RemoteException{
+        if(valor <= 0.0){
+            System.out.println("Impossível depositar nada!");
+            return false;
+        }
         if(clientes.containsKey(numeroConta)){
             if(clientes.get(numeroConta).saldo < valor){
                 System.out.println("Não foi possível fazer o saldo! Saldo muito baixo!");
@@ -58,6 +62,10 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
     }
 
     public boolean depositar(Integer numeroConta, double valor) throws RemoteException{
+        if(valor <= 0.0){
+            System.out.println("Impossível depositar nada!");
+            return false;
+        }
         if(!clientes.containsKey(numeroConta)){
             System.out.println("Cliente não encontrado!");
             return false;
