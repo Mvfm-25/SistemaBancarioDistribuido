@@ -8,12 +8,12 @@ public class AdminServer {
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado.");
 
-            AdminInterface admin = new Admin();
+            // AdminInterface admin = new Admin();
 
             Naming.rebind("Admin", new Admin());
-            Naming.rebind("Agencia", new Agencia());
-            Naming.rebind("Caixa", new Caixa());
-            System.out.println("Admin & Agencia prontos!");
+            Naming.rebind("Agencia", new Agencia("localhost"));
+            Naming.rebind("Caixa", new Caixa("localhost"));
+            System.out.println("Serviços prontos!");
         } catch (RemoteException e) {
             System.err.println("Erro nos servidores: ");
             e.printStackTrace();

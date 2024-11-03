@@ -1,25 +1,36 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Admin extends UnicastRemoteObject implements AdminInterface {
 
-    HashMap<Integer, Cliente> clientes;
+    String id;
+    HashMap<Integer, Cliente> clientes = new HashMap<>();;
 
     public Admin() throws RemoteException{
-        clientes = new HashMap<>();
+        this.id = UUID.randomUUID().toString();
+        System.out.println("Admin %s foi criado.".formatted(this.id));
+    }
+
+    public HashMap<Integer, Cliente> getClientes() throws RemoteException {
+        return this.clientes;
+    }
+
+    public String getId() throws RemoteException{
+        return id;
     }
 
     public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException {
-        for(int i = 0; i < 10; i++){
-            if (clientes.containsKey(numeroConta)){
-                System.out.println("Cliente já existente!");
-                return false;
-            }
+        if (clientes.containsKey(numeroConta)) {
+            System.out.println("Cliente já existente!");
+            return false;
+        } else {
+            Cliente c = new Cliente(numeroConta, nomeCliente);
+            clientes.put(numeroConta, c);
+            System.out.println(clientes);
+            return true;
         }
-        Cliente c = new Cliente(numeroConta, nomeCliente);
-        clientes.put(numeroConta, c);
-        return true;
     }
 
     public boolean fecharConta(Integer numeroConta) throws RemoteException{
@@ -56,10 +67,14 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
     }
 
     public double consultarSaldo(Integer numeroConta) throws  RemoteException{
+        System.out.println(clientes);
+        System.out.println("numeroConta recebido : " + numeroConta);
+        System.out.println("Consultando saldo...\nClientes sendo consultado : " + clientes.get(numeroConta).nomeCliente);
         if(!clientes.containsKey(numeroConta)){
             System.out.println("Cliente não encontrado!");
             return -1;
         }
+        System.out.println("Saldo do cliente " + numeroConta + ": " + clientes.get(numeroConta).saldo);
         return clientes.get(numeroConta).saldo;
     }
 

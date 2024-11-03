@@ -1,7 +1,11 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 
 public interface AdminInterface extends Remote {
+    String getId() throws RemoteException;
+    public HashMap<Integer, Cliente> getClientes() throws RemoteException;
+
     // Operação para abrir uma nova conta
     boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException;
 

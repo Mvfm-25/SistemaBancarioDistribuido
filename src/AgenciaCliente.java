@@ -15,9 +15,11 @@ public class AgenciaCliente {
         try {
             AgenciaInterface iacon = (AgenciaInterface) Naming.lookup("//" +args[0] + "/Agencia");
             System.out.println("Criando clientes...");
-            iacon.abrirConta(1, "Optimus");
-            iacon.abrirConta(2, "Metroplex");
-            System.out.println("Clientes criados!");
+            if(iacon.abrirConta(1, "Optimus")){
+                System.out.println("Cliente 01 criado!");
+            } else {
+                System.out.println("Falha ao criar o cliente 01...");
+            }
 
         } catch (Exception e) {
             System.out.println("AgenciaCliente falhou...");

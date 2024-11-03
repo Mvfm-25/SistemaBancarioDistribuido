@@ -4,6 +4,7 @@ public class Cliente {
     Double saldo;
 
     public Cliente(Integer num, String nome){
+        saldo = 0.0;
         numeroCliente = num;
         nomeCliente = nome;
     }
@@ -14,5 +15,9 @@ public class Cliente {
         saldo += q;
     }
 
+    @Override
+    public String toString(){
+        return (numeroCliente + nomeCliente + saldo);
+    }
 
 }

@@ -1,13 +1,30 @@
+import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 public class Agencia extends UnicastRemoteObject implements AgenciaInterface{
+    AdminInterface upTop;
     String nomeAgencia;
-    Admin upTop = new Admin();
+    String hostname;
+    String idAgencia;
 
-    public Agencia() throws RemoteException{
-        nomeAgencia = "Agência IACON";
+    public Agencia(String hostname) throws RemoteException{
+        try {
+            upTop = (AdminInterface) Naming.lookup("//" + hostname + "/Admin");
+            nomeAgencia = "Agência IACON";
+            this.idAgencia = UUID.randomUUID().toString();
+            System.out.println("Agencia %s foi criada".formatted(idAgencia));
+            System.out.println("Agencia conectada ao Admin %s.".formatted(upTop.getId()));
+        } catch (Exception e) {
+            System.out.println("Erro ao criar Agencia...");
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getId() throws RemoteException {
+        return idAgencia;
     }
 
     public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException{
@@ -31,7 +48,7 @@ public class Agencia extends UnicastRemoteObject implements AgenciaInterface{
     }
 
     public String getNomeConta(Integer i) throws RemoteException{
-        return upTop.clientes.get(i).nomeCliente;
+        return upTop.getClientes().get(i).nomeCliente;
     }
 
 }
