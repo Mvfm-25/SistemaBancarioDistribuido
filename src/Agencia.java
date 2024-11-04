@@ -1,15 +1,15 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.UUID;
 
-public class Agencia extends UnicastRemoteObject implements AgenciaInterface{
+public class Agencia extends UnicastRemoteObject implements AgenciaInterface {
     AdminInterface upTop;
     String nomeAgencia;
     String hostname;
     String idAgencia;
 
-    public Agencia(String hostname) throws RemoteException{
+    public Agencia(String hostname) throws RemoteException {
         try {
             upTop = (AdminInterface) Naming.lookup("//" + hostname + "/Admin");
             nomeAgencia = "Agência IACON";
@@ -20,35 +20,34 @@ public class Agencia extends UnicastRemoteObject implements AgenciaInterface{
             System.out.println("Erro ao criar Agencia...");
             e.printStackTrace();
         }
-
     }
 
     public String getId() throws RemoteException {
         return idAgencia;
     }
 
-    public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException{
-        return (upTop.abrirConta(numeroConta, nomeCliente));
+    public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException {
+        String requestId = UUID.randomUUID().toString(); // Gerando um requestId único
+        return (upTop.abrirConta(numeroConta, nomeCliente, requestId));
     }
 
-    public boolean fecharConta(Integer numeroConta) throws RemoteException{
+    public boolean fecharConta(Integer numeroConta) throws RemoteException {
         return (upTop.fecharConta(numeroConta));
     }
 
-    public boolean sacar(Integer numeroConta, double valor) throws RemoteException{
+    public boolean sacar(Integer numeroConta, double valor) throws RemoteException {
         return (upTop.sacar(numeroConta, valor));
     }
 
-    public boolean depositar(Integer numeroConta, double valor) throws RemoteException{
+    public boolean depositar(Integer numeroConta, double valor) throws RemoteException {
         return (upTop.depositar(numeroConta, valor));
     }
 
-    public double consultarSaldo(Integer numeroConta) throws  RemoteException{
+    public double consultarSaldo(Integer numeroConta) throws RemoteException {
         return (upTop.consultarSaldo(numeroConta));
     }
 
-    public String getNomeConta(Integer i) throws RemoteException{
+    public String getNomeConta(Integer i) throws RemoteException {
         return upTop.getClientes().get(i).nomeCliente;
     }
-
 }
