@@ -14,7 +14,7 @@ public interface AdminInterface extends Remote {
     boolean fecharConta(Integer numeroConta) throws RemoteException;
 
     // Operações de saque, depósito e consulta de saldo
-    boolean sacar(Integer numeroConta, double valor) throws RemoteException;
-    boolean depositar(Integer numeroConta, double valor) throws RemoteException;
+    boolean sacar(Integer numeroConta, double valor,String requestID) throws RemoteException;
+    boolean depositar(Integer numeroConta, double valor, String requestID) throws RemoteException;
     double consultarSaldo(Integer numeroConta) throws RemoteException;
 }

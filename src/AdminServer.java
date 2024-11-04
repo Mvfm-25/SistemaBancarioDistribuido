@@ -8,8 +8,6 @@ public class AdminServer {
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado.");
 
-            // AdminInterface admin = new Admin();
-
             Naming.rebind("Admin", new Admin());
             Naming.rebind("Agencia", new Agencia("localhost"));
             Naming.rebind("Caixa", new Caixa("localhost"));

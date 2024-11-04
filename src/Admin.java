@@ -1,11 +1,13 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public class Admin extends UnicastRemoteObject implements AdminInterface {
 
     String id;
+    LinkedList<String> processosOcorrendo = new LinkedList<>();
     HashMap<Integer, Cliente> clientes = new HashMap<>();
 
     public Admin() throws RemoteException {
@@ -21,16 +23,20 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
         return id;
     }
 
-    // Tornando o método abrirConta synchronized e incluindo o requestId
     public synchronized boolean abrirConta(Integer numeroConta, String nomeCliente, String requestId) throws RemoteException {
         if (clientes.containsKey(numeroConta)) {
             System.out.println("Cliente já existente! Request ID: " + requestId);
             return false;
         } else {
+            if(processosOcorrendo.contains(requestId)){
+                System.out.println("Processo já está ocorrendo! Tente novamente depois!");
+                return false;
+            }
             Cliente c = new Cliente(numeroConta, nomeCliente);
             clientes.put(numeroConta, c);
             System.out.println("Conta criada com sucesso para cliente: " + nomeCliente + ". Request ID: " + requestId);
             System.out.println(clientes);
+            processosOcorrendo.remove(requestId);
             return true;
         }
     }
@@ -45,7 +51,7 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
         }
     }
 
-    public boolean sacar(Integer numeroConta, double valor) throws RemoteException {
+    public boolean sacar(Integer numeroConta, double valor, String requestID) throws RemoteException {
         if (valor <= 0.0) {
             System.out.println("Impossível sacar nada!");
             return false;
@@ -55,6 +61,11 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
                 System.out.println("Não foi possível fazer o saque! Saldo muito baixo!");
                 return false;
             } else {
+                if(processosOcorrendo.contains(requestID)){
+                    System.out.println("Processo já está ocorrendo! Tente novamente depois!");
+                    processosOcorrendo.remove(requestID);
+                    return false;
+                }
                 clientes.get(numeroConta).saca(valor);
                 return true;
             }
@@ -63,7 +74,7 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
         return false;
     }
 
-    public boolean depositar(Integer numeroConta, double valor) throws RemoteException {
+    public boolean depositar(Integer numeroConta, double valor, String requestID) throws RemoteException {
         if (valor <= 0.0) {
             System.out.println("Impossível depositar nada!");
             return false;
@@ -72,7 +83,12 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
             System.out.println("Cliente não encontrado!");
             return false;
         }
+        if(processosOcorrendo.contains(requestID)){
+            System.out.println("Processo já está ocorrendo! Tente novamente depois!");
+            return false;
+        }
         clientes.get(numeroConta).deposita(valor);
+        processosOcorrendo.remove(requestID);
         return true;
     }
 

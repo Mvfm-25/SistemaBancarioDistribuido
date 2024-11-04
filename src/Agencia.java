@@ -27,7 +27,7 @@ public class Agencia extends UnicastRemoteObject implements AgenciaInterface {
     }
 
     public boolean abrirConta(Integer numeroConta, String nomeCliente) throws RemoteException {
-        String requestId = UUID.randomUUID().toString(); // Gerando um requestId único
+        String requestId = UUID.randomUUID().toString();
         return (upTop.abrirConta(numeroConta, nomeCliente, requestId));
     }
 
@@ -36,11 +36,13 @@ public class Agencia extends UnicastRemoteObject implements AgenciaInterface {
     }
 
     public boolean sacar(Integer numeroConta, double valor) throws RemoteException {
-        return (upTop.sacar(numeroConta, valor));
+        String requestId = UUID.randomUUID().toString();
+        return (upTop.sacar(numeroConta, valor, requestId));
     }
 
     public boolean depositar(Integer numeroConta, double valor) throws RemoteException {
-        return (upTop.depositar(numeroConta, valor));
+        String requestId = UUID.randomUUID().toString();
+        return (upTop.depositar(numeroConta, valor, requestId));
     }
 
     public double consultarSaldo(Integer numeroConta) throws RemoteException {
