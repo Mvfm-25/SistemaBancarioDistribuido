@@ -12,6 +12,7 @@ public class AdminServer {
             System.exit(1);
         }
         try {
+            System.setProperty("java.rmi.server.hostname", args[0]);
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado.");
 
