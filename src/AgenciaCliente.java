@@ -1,37 +1,60 @@
+//Sistema Bancário Distribuído v.0007
+//C: MVFM       UA:061124
+
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class AgenciaCliente {
 
     public static void main(String[] args) {
-        Scanner teclado = new Scanner(System.in);
 
+        int cont = 0;
+        int contMax = 3;
         if (args.length != 1) {
             System.out.println("Uso : java AgenciaCliente <hostname>");
             System.exit(1);
         }
 
+        //Abrir Contas 01, 02.
+        //Tentar & falhar à criar uma segunda conta 01.
         try {
             AgenciaInterface iacon = (AgenciaInterface) Naming.lookup("//" + args[0] + "/Agencia");
             System.out.println("Criando clientes...");
 
-            if (iacon.abrirConta(1, "Optimus")) {
-                System.out.println("Cliente 01 criado!");
-            } else {
-                System.out.println("Falha ao criar o cliente 01...");
+            while (true){
+                try{
+                    System.out.println("Criando conta 01... \nID = 1 nomeConta = 'Optimus' " + iacon.abrirConta(1, "Optimus"));
+                    break;
+                } catch (RemoteException e){
+                    Thread.sleep(10);
+                    System.out.println("Erro! Processo já está em execução!\nTentando novamente...");
+                    if(++cont >= contMax){
+                        cont = 0;
+                        System.out.println("Tentativas máximas alcançada...");
+                        e.printStackTrace();
+                        break;
+                    }
+                }
             }
 
-            if (iacon.abrirConta(2, "Ultra Magnus")) {
-                System.out.println("Cliente 02 criado!");
-            } else {
-                System.out.println("Falha ao criar cliente 02...");
+            while (true){
+                try{
+                    System.out.println("Criando conta 02...\nID = 2 nomeConta = 'Ultra Magnus' " + iacon.abrirConta(2, "Ultra Magnus"));
+                    System.out.println("Depositando R$1000 em 02... " + iacon.depositar(2, 1000));
+                    break;
+                } catch (RemoteException e){
+                    Thread.sleep(10);
+                    System.out.println("Erro! Processo já está em execução!\nTentando novamente...");
+                    if(++cont >= contMax){
+                        cont = 0;
+                        System.out.println("Tentativas máximas alcançada...");
+                        e.printStackTrace();
+                        break;
+                    }
+                }
             }
 
-            if (iacon.abrirConta(1, "Tarn")) {
-                System.out.println("A criação de outro cliente 01 não deveria estar funcionando... Verificar código!");
-            } else {
-                System.out.println("Negada a criação da conta para Tarn!");
-            }
 
         } catch (Exception e) {
             System.out.println("AgenciaCliente falhou...");

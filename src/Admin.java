@@ -46,6 +46,7 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
             System.out.println("ID não corresponde a nenhum cliente inscrito!");
             return false;
         } else {
+            System.out.println(clientes);
             clientes.remove(numeroConta);
             return true;
         }
@@ -63,10 +64,12 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
             } else {
                 if(processosOcorrendo.contains(requestID)){
                     System.out.println("Processo já está ocorrendo! Tente novamente depois!");
-                    processosOcorrendo.remove(requestID);
                     return false;
                 }
+                processosOcorrendo.add(requestID);
+                System.out.println(clientes.get(numeroConta));
                 clientes.get(numeroConta).saca(valor);
+                processosOcorrendo.remove(requestID);
                 return true;
             }
         }
@@ -83,11 +86,14 @@ public class Admin extends UnicastRemoteObject implements AdminInterface {
             System.out.println("Cliente não encontrado!");
             return false;
         }
+
         if(processosOcorrendo.contains(requestID)){
             System.out.println("Processo já está ocorrendo! Tente novamente depois!");
             return false;
         }
+        processosOcorrendo.add(requestID);
         clientes.get(numeroConta).deposita(valor);
+        System.out.println(clientes.get(numeroConta));
         processosOcorrendo.remove(requestID);
         return true;
     }

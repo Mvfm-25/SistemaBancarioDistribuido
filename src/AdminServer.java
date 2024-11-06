@@ -1,3 +1,6 @@
+//Sistema Bancário Distribuído v.0007
+//C: MVFM       UA:061124
+
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
