@@ -7,13 +7,17 @@ import java.rmi.registry.LocateRegistry;
 
 public class AdminServer {
     public static void main(String[] args) {
+        if(args.length < 1){
+            System.out.println("Uso : java AdminServer <IP || Hostname>");
+            System.exit(1);
+        }
         try {
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado.");
 
-            Naming.rebind("Admin", new Admin());
-            Naming.rebind("Agencia", new Agencia("localhost"));
-            Naming.rebind("Caixa", new Caixa("localhost"));
+            Naming.rebind("rmi://" + args[0] + "/Admin", new Admin());
+            Naming.rebind("rmi://" + args[0] + "/Agencia", new Agencia(args[0]));
+            Naming.rebind("rmi://" + args[0] + "/Caixa", new Caixa(args[0]));
             System.out.println("Serviços prontos!");
         } catch (RemoteException e) {
             System.err.println("Erro nos servidores: ");
